@@ -1,5 +1,4 @@
 import {test,expect} from '@playwright/test';
-import { SDLoginPage } from '../pages/sauceDemoPages/SDLoginPage';
 import { SDProductsPage } from '../pages/sauceDemoPages/SDProductsPage';
 import { SDCartPage } from '../pages/sauceDemoPages/SDCartPage';
 import { SDCheckoutPage } from '../pages/sauceDemoPages/SDCheckoutPage';
@@ -64,7 +63,7 @@ test.describe('SauceDemo Purchase', () =>{
 
     test('@smoke Logout', async({page}) => {
         const productsPage = new SDProductsPage(page);
-        await productsPage.open('/inventory.html');
+        await productsPage.open();
         await productsPage.logout();
         await expect(page).toHaveURL('/');
     })
