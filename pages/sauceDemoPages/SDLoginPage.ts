@@ -12,7 +12,7 @@ export class SDLoginPage{
         this.loginButton = page.getByRole('button',{name:'login'});
     }
 
-    async sauceDemoLogin(username:string,password:string){
+    async login(username:string,password:string){
         await this.username.fill(username);
         await this.password.fill(password);
         await this.loginButton.click();

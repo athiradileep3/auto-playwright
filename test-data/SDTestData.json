@@ -1,15 +1,10 @@
 {
-    "urlLogin" : "https://www.saucedemo.com",
-    "urlProducts" : "https://www.saucedemo.com/inventory.html",
-    "urlCheckoutOverview" : "https://www.saucedemo.com/checkout-step-two.html",
-    "urlCheckoutComplete" : "https://www.saucedemo.com/checkout-complete.html",
-    "username" : "standard_user",
-    "password" : "secret_sauce",
     "products" : [
         "Sauce Labs Backpack",
         "Sauce Labs Bike Light",
         "Sauce Labs Fleece Jacket"
     ],
+    "productToRemove" : "Sauce Labs Backpack",
     "fName" : "Jane",
     "lName" : "Doe",
     "zipCode" : "123456" 

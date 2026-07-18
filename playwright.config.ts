@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import {env} from './config/env';
 
 export default defineConfig({
   testDir: './tests',
@@ -10,16 +11,27 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   
-  reporter: 'html',
+  reporter: [
+    ['html'],
+    ['list']
+  ],
   
   use: {
+    baseURL: env.baseUrl,
     trace: 'on-first-retry',
+    headless: false,
   },
 
   projects: [
     {
+      name: 'setup',
+      testMatch: /.*login\.setup\.ts/
+    },
+
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      dependencies:['setup']
     },
 /*
     {

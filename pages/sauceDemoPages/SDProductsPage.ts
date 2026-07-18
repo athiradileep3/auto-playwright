@@ -16,11 +16,12 @@ export class SDProductsPage{
     }
 
     async addProductsToCart(productName:string){
+        await this.page.waitForSelector('.inventory_item');
         await this.productItems.filter({hasText:productName}).
         getByRole('button',{name:'Add to cart'}).click();
     }
 
-    async goTocart(){
+    async goToCart(){
         await this.cartButton.click();
     }
 

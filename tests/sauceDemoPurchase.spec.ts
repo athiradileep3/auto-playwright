@@ -1,76 +1,59 @@
-import {test,expect} from '@playwright/test';
-import {SDPageManager} from '../pages/SDPageManager';
+import {test,expect, BrowserContext} from '@playwright/test';
+import {SDPageManager} from '../pages/sauceDemoPages/SDPageManager';
+import { ProductSetupHelper } from '../utils/ProductSetupHelper';
 import dataset from '../test-data/SDTestData.json';
 
-let webContext:any;
-test.use({storageState:'state.json'});
+test.use({storageState:'tests/auth/user.json'});
 
-test.beforeAll(async({browser}) => {
-    const context = await browser.newContext();
-    const firstPage = await context.newPage();
-    const pm = new SDPageManager(firstPage);
-
-    await pm.basePage.goToPage(dataset.urlLogin);
-    await pm.loginPage.sauceDemoLogin(dataset.username,dataset.password);
-    await firstPage.locator('.inventory_item').first().waitFor();
-
-    await context.storageState({path:'state.json'});
-    webContext = await browser.newContext({storageState:'state.json'});
-});
 
 test.describe('SauceDemo Purchase', () =>{
-    test('Add products', async() => {
-        const page = await webContext.newPage();
-        const pageManager = new SDPageManager(page);
-        await pageManager.basePage.goToPage(dataset.urlProducts);
-        for(const product of dataset.products){
-            await pageManager.productsPage.addProductsToCart(product);
-        }
-    });
 
-    test('Cart Validation',async() => {
-        const page = await webContext.newPage();
+    test('@regression Add Products & Validate Cart',async({page}) => {
         const pageManager = new SDPageManager(page);
-        await pageManager.basePage.goToPage(dataset.urlProducts);
-        await pageManager.productsPage.goTocart();
+        await ProductSetupHelper.addProducts(pageManager);
+        await pageManager.productsPage.goToCart();
         const actualItems = await pageManager.cartPage.verifyCartItems();
         expect(actualItems).toEqual(dataset.products);
     });
 
-    /*
-    test('Remove Product',async() => {
+   /* 
+    test('Remove Product',async({page}) => {
+        const pageManager = new SDPageManager(page);
+        await ProductSetupHelper.addProducts(pageManager);
+        await pageManager.cartPage.removeProduct(dataset.productToRemove);
+        await expect(page.getByText(dataset.productToRemove)).not.toBeVisible();
     
     });
-    */
-
-    test('Checkout', async() => {
-        const page = await webContext.newPage();
+    
+*/
+    test('@regression Checkout', async({page}) => {
         const pageManager = new SDPageManager(page);
-        await pageManager.basePage.goToPage(dataset.urlProducts);
-        await pageManager.productsPage.goTocart();
+        await ProductSetupHelper.addProducts(pageManager);
+        await pageManager.productsPage.goToCart();
         await pageManager.cartPage.clickCheckout();
         await pageManager.checkoutpage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
         //Verify if user on Checkout Overview page
-        await expect(page).toHaveURL(dataset.urlCheckoutOverview);
+        await expect(page).toHaveURL('/checkout-step-two.html');
         const items = await pageManager.checkoutOverview.verifyProductsPersist();
         expect(items).toEqual(dataset.products);
     });
 
-    test ('Complete Order', async() => {
-        const page = await webContext.newPage();
+    test ('@e2e Complete Order', async({page}) => {
         const pageManager = new SDPageManager(page);
-        await pageManager.basePage.goToPage(dataset.urlCheckoutOverview);
+        await ProductSetupHelper.addProducts(pageManager);
+        await pageManager.productsPage.goToCart();
+        await pageManager.cartPage.clickCheckout();
+        await pageManager.checkoutpage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
         await pageManager.checkoutOverview.clickFinish();
         await expect(pageManager.confirmation.success).toBeVisible();
-        await expect(page).toHaveURL(dataset.urlCheckoutComplete);
+        await expect(page).toHaveURL('/checkout-complete.html');
     });
 
-    test('Logout', async() => {
-        const page = await webContext.newPage();
+    test('@smoke Logout', async({page}) => {
         const pageManager = new SDPageManager(page);
-        await pageManager.basePage.goToPage(dataset.urlProducts);
+        await pageManager.basePage.goToPage('/inventory.html');
         await pageManager.productsPage.logout();
-        await expect(page).toHaveURL(dataset.urlLogin);
+        await expect(page).toHaveURL('/');
     })
 
 });
