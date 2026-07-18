@@ -7,9 +7,18 @@ dotenv.config({
   path: path.resolve(__dirname, `.env.${testEnv}`)
 });
 
+
+function getEnv(name:string):string {
+  const value = process.env[name]?.trim();
+  if(!value){
+    throw new Error(`Environment variable invalid/not found: ${name}`);
+  }
+  return value;
+}
+
 export const env = {
   testEnv,
-  baseUrl: process.env.SD_BASE_URL!,
-  username: process.env.SD_USERNAME!,
-  password: process.env.SD_PASSWORD!
+  baseUrl: getEnv("SD_BASE_URL"),
+  username: getEnv("SD_USERNAME"),
+  password: getEnv("SD_PASSWORD")
 };
