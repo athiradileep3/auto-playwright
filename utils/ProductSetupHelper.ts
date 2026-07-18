@@ -1,14 +1,11 @@
-import { SDPageManager } from "../pages/sauceDemoPages/SDPageManager";
-import dataset from '../test-data/SDTestData.json';
+import { SDProductsPage } from "../pages/sauceDemoPages/SDProductsPage";
 
 export class ProductSetupHelper{
     
-    static async addProducts(pageManager:SDPageManager){
-        await pageManager.basePage.goToPage('/inventory.html');
-        for(const product of dataset.products){
-            console.log(`Adding ${product}`);
-            await pageManager.productsPage.addProductsToCart(product);
-            console.log(`Added ${product}`);
+    static async addProducts(productsPage:SDProductsPage,products:string[]){
+        await productsPage.open();
+        for(const product of products){
+            await productsPage.addProductsToCart(product);
         }
 
     }

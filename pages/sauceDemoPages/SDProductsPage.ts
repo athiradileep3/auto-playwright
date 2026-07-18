@@ -1,18 +1,22 @@
 import {Page,Locator} from '@playwright/test';
+import { SDBasePage } from './SDBasePage';
 
-export class SDProductsPage{
-    page:Page;
-    productItems:Locator;
-    cartButton:Locator;
-    menu:Locator;
-    logoutButton:Locator;
+export class SDProductsPage extends SDBasePage{
+    readonly productItems:Locator;
+    readonly cartButton:Locator;
+    readonly menu:Locator;
+    readonly logoutButton:Locator;
 
     constructor(page:Page){
-        this.page = page;
-        this.productItems = page.locator('.inventory_item');
-        this.cartButton = page.locator('#shopping_cart_container');
-        this.menu = page.getByRole('button',{name:'Open Menu'});
-        this.logoutButton = page.locator('#logout_sidebar_link');
+        super(page);
+        this.productItems = this.page.locator('.inventory_item');
+        this.cartButton = this.page.locator('#shopping_cart_container');
+        this.menu = this.page.getByRole('button',{name:'Open Menu'});
+        this.logoutButton = this.page.locator('#logout_sidebar_link');
+    }
+
+    async open(){
+        await this.page.goto('/inventory.html');
     }
 
     async addProductsToCart(productName:string){

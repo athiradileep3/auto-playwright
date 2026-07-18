@@ -1,16 +1,16 @@
 import {Page,Locator} from '@playwright/test';
+import { SDBasePage } from './SDBasePage';
 
-export class SDCheckoutOverviewPage{
-    page:Page;
-    cartList:Locator;
-    cartItems:Locator;
-    finishButton:Locator;
+export class SDCheckoutOverviewPage extends SDBasePage{
+    readonly cartList:Locator;
+    readonly cartItems:Locator;
+    readonly finishButton:Locator;
 
     constructor(page:Page){
-        this.page = page;
-        this.cartList = page.locator('.cart_list');
+        super(page);
+        this.cartList = this.page.locator('.cart_list');
         this.cartItems = this.cartList.locator('.cart_item');
-        this.finishButton = page.getByRole('button',{name:'Finish'});
+        this.finishButton = this.page.getByRole('button',{name:'Finish'});
     }
 
     async verifyProductsPersist(){

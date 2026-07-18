@@ -1,17 +1,17 @@
 import { Page, Locator } from '@playwright/test';
+import { SDBasePage } from './SDBasePage';
 
 
-export class SDCartPage {
-    page: Page;
-    cartList: Locator;
-    cartItems: Locator;
-    checkoutButton: Locator;
+export class SDCartPage extends SDBasePage{
+    readonly cartList: Locator;
+    readonly cartItems: Locator;
+    readonly checkoutButton: Locator;
 
     constructor(page: Page) {
-        this.page = page;
-        this.cartList = page.locator('.cart_list');
+        super(page);
+        this.cartList = this.page.locator('.cart_list');
         this.cartItems = this.cartList.locator('.cart_item');
-        this.checkoutButton = page.getByRole('button', { name: 'Checkout' });
+        this.checkoutButton = this.page.getByRole('button', { name: 'Checkout' });
         
     }
 

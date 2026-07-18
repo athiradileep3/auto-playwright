@@ -1,15 +1,15 @@
 import {Page,Locator} from '@playwright/test';
+import { SDBasePage } from './SDBasePage';
 
-export class SDLoginPage{
-    page:Page;
-    username:Locator;
-    password:Locator;
-    loginButton:Locator;
+export class SDLoginPage extends SDBasePage{
+    readonly username:Locator;
+    readonly password:Locator;
+    readonly loginButton:Locator;
     constructor(page:Page){
-        this.page = page;
-        this.username = page.getByPlaceholder('Username');
-        this.password = page.getByPlaceholder('Password');
-        this.loginButton = page.getByRole('button',{name:'login'});
+        super(page);
+        this.username = this.page.getByPlaceholder('Username');
+        this.password = this.page.getByPlaceholder('Password');
+        this.loginButton = this.page.getByRole('button',{name:'login'});
     }
 
     async login(username:string,password:string){

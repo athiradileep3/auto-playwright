@@ -1,5 +1,10 @@
-import {test,expect, BrowserContext} from '@playwright/test';
-import {SDPageManager} from '../pages/sauceDemoPages/SDPageManager';
+import {test,expect} from '@playwright/test';
+import { SDLoginPage } from '../pages/sauceDemoPages/SDLoginPage';
+import { SDProductsPage } from '../pages/sauceDemoPages/SDProductsPage';
+import { SDCartPage } from '../pages/sauceDemoPages/SDCartPage';
+import { SDCheckoutPage } from '../pages/sauceDemoPages/SDCheckoutPage';
+import { SDCheckoutOverviewPage } from '../pages/sauceDemoPages/SDCheckoutOverviewPage';
+import { SDConfirmationPage } from '../pages/sauceDemoPages/SDConfirmationPage';
 import { ProductSetupHelper } from '../utils/ProductSetupHelper';
 import dataset from '../test-data/SDTestData.json';
 
@@ -9,10 +14,11 @@ test.use({storageState:'tests/auth/user.json'});
 test.describe('SauceDemo Purchase', () =>{
 
     test('@regression Add Products & Validate Cart',async({page}) => {
-        const pageManager = new SDPageManager(page);
-        await ProductSetupHelper.addProducts(pageManager);
-        await pageManager.productsPage.goToCart();
-        const actualItems = await pageManager.cartPage.verifyCartItems();
+        const productsPage = new SDProductsPage(page);
+        const cartPage = new SDCartPage(page);
+        await ProductSetupHelper.addProducts(productsPage,dataset.products);
+        await productsPage.goToCart();
+        const actualItems = await cartPage.verifyCartItems();
         expect(actualItems).toEqual(dataset.products);
     });
 
@@ -27,32 +33,39 @@ test.describe('SauceDemo Purchase', () =>{
     
 */
     test('@regression Checkout', async({page}) => {
-        const pageManager = new SDPageManager(page);
-        await ProductSetupHelper.addProducts(pageManager);
-        await pageManager.productsPage.goToCart();
-        await pageManager.cartPage.clickCheckout();
-        await pageManager.checkoutpage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
+        const productsPage = new SDProductsPage(page);
+        const cartPage = new SDCartPage(page);
+        const checkoutPage = new SDCheckoutPage(page);
+        const checkoutOverview = new SDCheckoutOverviewPage(page);
+        await ProductSetupHelper.addProducts(productsPage,dataset.products);
+        await productsPage.goToCart();
+        await cartPage.clickCheckout();
+        await checkoutPage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
         //Verify if user on Checkout Overview page
         await expect(page).toHaveURL('/checkout-step-two.html');
-        const items = await pageManager.checkoutOverview.verifyProductsPersist();
+        const items = await checkoutOverview.verifyProductsPersist();
         expect(items).toEqual(dataset.products);
     });
 
     test ('@e2e Complete Order', async({page}) => {
-        const pageManager = new SDPageManager(page);
-        await ProductSetupHelper.addProducts(pageManager);
-        await pageManager.productsPage.goToCart();
-        await pageManager.cartPage.clickCheckout();
-        await pageManager.checkoutpage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
-        await pageManager.checkoutOverview.clickFinish();
-        await expect(pageManager.confirmation.success).toBeVisible();
+        const productsPage = new SDProductsPage(page);
+        const cartPage = new SDCartPage(page);
+        const checkoutPage = new SDCheckoutPage(page);
+        const checkoutOverview = new SDCheckoutOverviewPage(page);
+        const confirmationPage = new SDConfirmationPage(page);
+        await ProductSetupHelper.addProducts(productsPage,dataset.products);
+        await productsPage.goToCart();
+        await cartPage.clickCheckout();
+        await checkoutPage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
+        await checkoutOverview.clickFinish();
+        await expect(confirmationPage.success).toBeVisible();
         await expect(page).toHaveURL('/checkout-complete.html');
     });
 
     test('@smoke Logout', async({page}) => {
-        const pageManager = new SDPageManager(page);
-        await pageManager.basePage.goToPage('/inventory.html');
-        await pageManager.productsPage.logout();
+        const productsPage = new SDProductsPage(page);
+        await productsPage.open('/inventory.html');
+        await productsPage.logout();
         await expect(page).toHaveURL('/');
     })
 

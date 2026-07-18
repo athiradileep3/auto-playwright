@@ -1,10 +1,10 @@
 import {Page,Locator} from '@playwright/test';
+import { SDBasePage } from './SDBasePage';
 
-export class SDConfirmationPage{
-    page:Page;
-    success:Locator;
+export class SDConfirmationPage extends SDBasePage{
+    readonly success:Locator;
     constructor(page:Page){
-        this.page = page;
-        this.success = page.getByText('Thank you for your order!');
+        super(page);
+        this.success = this.page.getByText('Thank you for your order!');
     }
 }
