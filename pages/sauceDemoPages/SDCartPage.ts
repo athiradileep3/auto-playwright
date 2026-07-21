@@ -1,7 +1,6 @@
 import { Page, Locator } from '@playwright/test';
 import { SDBasePage } from './SDBasePage';
 
-
 export class SDCartPage extends SDBasePage{
     readonly cartList: Locator;
     readonly cartItems: Locator;
