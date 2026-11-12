@@ -161,33 +161,39 @@ Then create the corresponding `config/.env.stage` file.
 Do not commit actual credentials, populated environment files or authentication state to the repository.
 
 
-## Running the Tests  
-**Run all tests**  
+## Running the Tests    
+**Run the complete test suite:**  
 ```bash
-npx playwright test
+npm test
 ```
-**Run tests in headed mode**  
+**Run tests in headed mode (with the browser visible):**  
 ```bash
-npx playwright test --headed
+npm run test:headed
 ```
-**Run tests with Playwright UI mode**  
+**Run tests in Playwright UI mode:**  
 ```bash
-npx playwright test --ui
+npm run test:ui
 ```
-**Run tests using a specific browser project**
+**Run only smoke tests:**  
 ```bash
-npx playwright test --project=chromium
+npm run test:smoke
 ```
-**Run tests using a specific tag**
+**Run only regression tests:**  
 ```bash
-npx playwright test --grep @smoke
+npm run test:regression
 ```
-**Run tests in debug mode**
+**Run tests in debug mode:**  
 ```bash
-npx playwright test --debug
+npm run test:debug
 ```
-
-
+**Run TypeScript type checking:**  
+```bash
+npm run typecheck
+```
+**View the HTML test report:**  
+```bash
+npm run report
+```
 ## Reports and Debugging  
 The framework is configured to generate HTML and list reports. After execution, open the HTML report using:  
 ```bash
