@@ -1,12 +1,20 @@
 
-# Playwright
+# Dependencies
 node_modules/
+
+# Playwright
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Log files
+/log/
+*.log
+
 # Authentication state
-/tests/auth/user.json
+/.auth/
+
 # Environment files
-config/.env*
-!config/.env.example
+/config/.env*
+!/config/.env.sample

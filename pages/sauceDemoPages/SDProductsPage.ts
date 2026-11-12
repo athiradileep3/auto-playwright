@@ -23,8 +23,11 @@ export class SDProductsPage extends SDBasePage{
         await this.header.goToCart();
     }
 
-    async addProductsToCart(productName:string){
+    async waitForProductListLoad(){
         await this.page.waitForSelector('.inventory_item');
+    }
+
+    async addProductsToCart(productName:string){
         await this.productItems.filter({hasText:productName}).
         getByRole('button',{name:'Add to cart'}).click();
     }

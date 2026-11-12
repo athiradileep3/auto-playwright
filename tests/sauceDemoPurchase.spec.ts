@@ -7,7 +7,7 @@ import { SDConfirmationPage } from '../pages/sauceDemoPages/SDConfirmationPage';
 import { ProductSetupHelper } from '../utils/ProductSetupHelper';
 import dataset from '../test-data/SDTestData.json';
 
-test.use({storageState:'tests/auth/user.json'});
+test.use({storageState:'.auth/user.json'});
 
 
 test.describe('SauceDemo Purchase', () =>{

@@ -11,6 +11,6 @@ setup('authenticate', async ({ page }) => {
     await page.waitForURL('/inventory.html');
 
     await page.context().storageState({
-        path: 'tests/auth/user.json'
+        path: '.auth/user.json'
     });
 });

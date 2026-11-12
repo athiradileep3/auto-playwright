@@ -11,7 +11,7 @@ export class SDSideMenu{
         this.page = page;
         this.allItemsLink = this.page.getByRole('link',{name:'All Items'});
         this.aboutLink = this.page.getByRole('link',{name:'About'});
-        this.logoutLink = this.page.getByRole('link',{name:'Logout'});
+        this.logoutLink = this.page.getByRole('button',{name:'Logout'});
         this.resetAppStateLink = this.page.getByRole('link',{name:'Reset App State'});
     }
 
