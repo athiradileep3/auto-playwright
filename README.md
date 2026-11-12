@@ -12,7 +12,6 @@ It automates the end-to-end purchase flow on [SauceDemo](https://www.saucedemo.c
 | Node.js | Runtime environment |
 | JSON | Test data management |
 | GitHub Actions | CI/CD integration |
-| BrowserStack | Cloud testing configuration |
 
 
 ## What's in it (Key Features)
@@ -65,7 +64,6 @@ auto-playwright/
 |    |---ProductSetupHelper.ts
 |
 |--- .gitignore
-|--- browserstack.yml
 |--- package-lock.json
 |--- package.json
 |--- playwright.config.ts
