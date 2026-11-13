@@ -4,6 +4,16 @@ on:
     branches: [ main, 'feature/**' ]
   pull_request:
     branches: [ main, 'feature/**' ]
+  workflow_dispatch:
+    inputs:
+      execution_target:
+        description: 'Choose execution platform'
+        required: true
+        type: choice
+        default: ubuntu
+        options:
+          - ubuntu
+          - browserstack
 jobs:
   test:
     timeout-minutes: 15
@@ -19,10 +29,23 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
+      if: ${{ github.event_name != 'workflow_dispatch' || inputs.execution_target == 'ubuntu' }}
       run: npx playwright install --with-deps
-    - name: Run Playwright tests
+    - name: Run Playwright tests on Ubuntu
+      if: ${{ github.event_name != 'workflow_dispatch' || inputs.execution_target == 'ubuntu' }}
       run: npx playwright test
       env:
+        TEST_ENV: local
+        SD_BASE_URL: ${{ secrets.SD_BASE_URL }}
+        SD_USERNAME: ${{ secrets.SD_USERNAME }}
+        SD_PASSWORD: ${{ secrets.SD_PASSWORD }}
+    - name: Run Playwright tests on BrowserStack
+      if: ${{ github.event_name == 'workflow_dispatch' && inputs.execution_target == 'browserstack' }}
+      run: npx browserstack-node-sdk playwright test
+      env:
+        TEST_ENV: browserstack
+        BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+        BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
         SD_BASE_URL: ${{ secrets.SD_BASE_URL }}
         SD_USERNAME: ${{ secrets.SD_USERNAME }}
         SD_PASSWORD: ${{ secrets.SD_PASSWORD }}
