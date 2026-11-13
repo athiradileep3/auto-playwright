@@ -1,0 +1,15 @@
+framework: playwright
+userName: ${BROWSERSTACK_USERNAME}
+accessKey: ${BROWSERSTACK_ACCESS_KEY}
+platforms:
+  - os: Windows
+    osVersion: 11
+    browserName: Chrome
+    browserVersion: latest
+browserstackLocal: false
+projectName: SauceDemo_Automation
+buildName: Regression
+# CUSTOM_TAG_1: "No tag for now"
+debug: true
+consoleLogs: info
+selfHeal: false

@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import { test, expect } from '../fixtures/auth.fixture';
 import { SDProductsPage } from '../pages/sauceDemoPages/SDProductsPage';
 import { SDCartPage } from '../pages/sauceDemoPages/SDCartPage';
 import { SDCheckoutPage } from '../pages/sauceDemoPages/SDCheckoutPage';
@@ -7,22 +7,20 @@ import { SDConfirmationPage } from '../pages/sauceDemoPages/SDConfirmationPage';
 import { ProductSetupHelper } from '../utils/ProductSetupHelper';
 import dataset from '../test-data/SDTestData.json';
 
-test.use({storageState:'.auth/user.json'});
-
-
 test.describe('SauceDemo Purchase', () =>{
 
-    test('@regression Add Products & Validate Cart',async({page}) => {
+    test('@regression Add Products & Validate Cart',async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         const cartPage = new SDCartPage(page);
         await ProductSetupHelper.addProducts(productsPage,dataset.products);
         await productsPage.goToCart();
-        const actualItems = await cartPage.verifyCartItems();
+        await expect(cartPage.cartItems).toHaveCount(dataset.products.length);
+        const actualItems = await cartPage.getCartItems();
         expect(actualItems).toEqual(dataset.products);
     });
 
    /* 
-    test('Remove Product',async({page}) => {
+    test('Remove Product',async({page, authenticatedPage}) => {
         const pageManager = new SDPageManager(page);
         await ProductSetupHelper.addProducts(pageManager);
         await pageManager.cartPage.removeProduct(dataset.productToRemove);
@@ -31,7 +29,7 @@ test.describe('SauceDemo Purchase', () =>{
     });
     
 */
-    test('@regression Checkout', async({page}) => {
+    test('@regression Checkout', async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         const cartPage = new SDCartPage(page);
         const checkoutPage = new SDCheckoutPage(page);
@@ -42,11 +40,12 @@ test.describe('SauceDemo Purchase', () =>{
         await checkoutPage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
         //Verify if user on Checkout Overview page
         await expect(page).toHaveURL('/checkout-step-two.html');
-        const items = await checkoutOverview.verifyProductsPersist();
+        await expect(checkoutOverview.cartItems).toHaveCount(dataset.products.length);
+        const items = await checkoutOverview.getProducts();
         expect(items).toEqual(dataset.products);
     });
 
-    test ('@e2e Complete Order', async({page}) => {
+    test ('@e2e Complete Order', async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         const cartPage = new SDCartPage(page);
         const checkoutPage = new SDCheckoutPage(page);
@@ -61,7 +60,7 @@ test.describe('SauceDemo Purchase', () =>{
         await expect(page).toHaveURL('/checkout-complete.html');
     });
 
-    test('@smoke Logout', async({page}) => {
+    test('@smoke Logout', async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         await productsPage.open();
         await productsPage.logout();

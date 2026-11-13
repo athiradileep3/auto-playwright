@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+  "test:local": "playwright test",
+  "test:browserstack": "browserstack-node-sdk playwright test",
   "test": "npx playwright test",
   "test:headed": "npx playwright test --headed",
   "test:debug": "npx playwright test --debug",
@@ -18,8 +20,9 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
+    "@playwright/test": "^1.61.0",
     "@types/node": "^25.9.2",
+    "browserstack-node-sdk": "^1.79.1",
     "typescript": "^6.0.3"
   },
   "dependencies": {

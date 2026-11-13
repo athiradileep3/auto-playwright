@@ -14,7 +14,7 @@ export class SDCartPage extends SDBasePage{
         
     }
 
-    async verifyCartItems() {
+    async getCartItems() {
         const actualItems = await this.cartItems.locator('.inventory_item_name').allTextContents();
         return actualItems;
     }
