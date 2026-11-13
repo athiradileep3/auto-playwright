@@ -1,4 +1,5 @@
-import {test,expect} from '@playwright/test';
+//import {test,expect} from '@playwright/test';
+import { test, expect } from '../fixtures/browserstack.fixture';
 import { SDProductsPage } from '../pages/sauceDemoPages/SDProductsPage';
 import { SDCartPage } from '../pages/sauceDemoPages/SDCartPage';
 import { SDCheckoutPage } from '../pages/sauceDemoPages/SDCheckoutPage';
@@ -7,12 +8,12 @@ import { SDConfirmationPage } from '../pages/sauceDemoPages/SDConfirmationPage';
 import { ProductSetupHelper } from '../utils/ProductSetupHelper';
 import dataset from '../test-data/SDTestData.json';
 
-test.use({storageState:'.auth/user.json'});
+//test.use({storageState:'.auth/user.json'});
 
 
 test.describe('SauceDemo Purchase', () =>{
 
-    test('@regression Add Products & Validate Cart',async({page}) => {
+    test('@regression Add Products & Validate Cart',async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         const cartPage = new SDCartPage(page);
         await ProductSetupHelper.addProducts(productsPage,dataset.products);
@@ -32,7 +33,7 @@ test.describe('SauceDemo Purchase', () =>{
     });
     
 */
-    test('@regression Checkout', async({page}) => {
+    test('@regression Checkout', async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         const cartPage = new SDCartPage(page);
         const checkoutPage = new SDCheckoutPage(page);
@@ -48,7 +49,7 @@ test.describe('SauceDemo Purchase', () =>{
         expect(items).toEqual(dataset.products);
     });
 
-    test ('@e2e Complete Order', async({page}) => {
+    test ('@e2e Complete Order', async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         const cartPage = new SDCartPage(page);
         const checkoutPage = new SDCheckoutPage(page);
@@ -63,7 +64,7 @@ test.describe('SauceDemo Purchase', () =>{
         await expect(page).toHaveURL('/checkout-complete.html');
     });
 
-    test('@smoke Logout', async({page}) => {
+    test('@smoke Logout', async({page, authenticatedPage}) => {
         const productsPage = new SDProductsPage(page);
         await productsPage.open();
         await productsPage.logout();
