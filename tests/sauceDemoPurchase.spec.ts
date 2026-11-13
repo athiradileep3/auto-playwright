@@ -1,5 +1,5 @@
 //import {test,expect} from '@playwright/test';
-import { test, expect } from '../fixtures/browserstack.fixture';
+import { test, expect } from '../fixtures/auth.fixture';
 import { SDProductsPage } from '../pages/sauceDemoPages/SDProductsPage';
 import { SDCartPage } from '../pages/sauceDemoPages/SDCartPage';
 import { SDCheckoutPage } from '../pages/sauceDemoPages/SDCheckoutPage';
