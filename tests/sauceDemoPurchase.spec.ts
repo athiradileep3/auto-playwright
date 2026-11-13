@@ -17,7 +17,8 @@ test.describe('SauceDemo Purchase', () =>{
         const cartPage = new SDCartPage(page);
         await ProductSetupHelper.addProducts(productsPage,dataset.products);
         await productsPage.goToCart();
-        const actualItems = await cartPage.verifyCartItems();
+        await expect(cartPage.cartItems).toHaveCount(dataset.products.length);
+        const actualItems = await cartPage.getCartItems();
         expect(actualItems).toEqual(dataset.products);
     });
 
@@ -42,7 +43,8 @@ test.describe('SauceDemo Purchase', () =>{
         await checkoutPage.continueCheckout(dataset.fName,dataset.lName,dataset.zipCode);
         //Verify if user on Checkout Overview page
         await expect(page).toHaveURL('/checkout-step-two.html');
-        const items = await checkoutOverview.verifyProductsPersist();
+        await expect(checkoutOverview.cartItems).toHaveCount(dataset.products.length);
+        const items = await checkoutOverview.getProducts();
         expect(items).toEqual(dataset.products);
     });
 

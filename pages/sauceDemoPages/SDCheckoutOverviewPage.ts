@@ -13,7 +13,7 @@ export class SDCheckoutOverviewPage extends SDBasePage{
         this.finishButton = this.page.getByRole('button',{name:'Finish'});
     }
 
-    async verifyProductsPersist(){
+    async getProducts(){
         const items = await this.cartItems.locator('.inventory_item_name').allTextContents();
         return items;
     }
