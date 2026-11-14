@@ -1,10 +1,15 @@
 # Playwright Automation Framework - SauceDemo Application
 
-A test automation framework built using Playwright & TypeScript, following the Page Object Model (POM) design pattern and separation of concerns.
-
-This project demonstrates my approach to building maintainable test automation frameworks, with an emphasis on modular architecture, reusable components, test isolation, and efficient execution.
-
-It automates the end-to-end purchase flow on [SauceDemo](https://www.saucedemo.com/), covering login, product selection, cart validation, checkout, order confirmation and logout.
+A test automation framework built using Playwright & TypeScript, following the Page Object Model (POM) design pattern and separation of concerns. This project demonstrates my approach to building maintainable test automation frameworks, with an emphasis on modular architecture, reusable components, test isolation, and efficient execution.
+It automates the end-to-end purchase flow on [SauceDemo](https://www.saucedemo.com/), covering login, product selection, cart validation, checkout, order confirmation and logout.  
+## Featured Project - API Automation Framework  
+Alongside this SauceDemo UI automation framework, I've developed a dedicated API automation framework covering:  
+- REST API testing using Playwright `APIRequestContext`
+- API authentication and CRUD operations
+- Positive and negative test scenarios
+- Response validation and reusable API components
+- TypeScript and GitHub Actions integration  
+[**Click here to explore the API automation framework**](https://github.com/athiradileep3/playwright-api-automation)
 
 ## Tech Stack
 
