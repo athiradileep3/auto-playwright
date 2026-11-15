@@ -311,54 +311,78 @@ For BrowserStack runs, session details and recordings can be reviewed from the B
 
 ## CI/CD Integration
 
-The project uses GitHub Actions for automated test execution.
+The framework is integrated with **GitHub Actions** to automate test execution and enforce quality checks during the development lifecycle.
 
-The workflow in `.github/workflows/playwright.yml` supports the following triggers:
+### Workflow Triggers
 
-- Pushes to the `main` and `feature/**` branches
-- Pull requests targeting the `main` and `feature/**` branches
-- Manual execution through `workflow_dispatch`
+The GitHub Actions workflow is triggered by:
 
-For manual execution, the workflow provides two options:
+- Push events to `main` and `feature/**` branches.
+- Pull requests targeting `main` and `feature/**` branches.
+- Manual workflow dispatch with an option to select the execution platform.
 
-- **Ubuntu:** Runs tests on the GitHub Actions runner.
-- **BrowserStack:** Runs tests on BrowserStack using the BrowserStack SDK.
+### Pipeline Execution
 
-### Pipeline Steps
+The CI pipeline performs the following steps:
 
 1. Checks out the repository.
-2. Sets up Node.js 22 with npm dependency caching.
-3. Installs project dependencies using `npm ci`.
-4. Installs Playwright browsers when running on Ubuntu.
-5. Executes tests based on the selected execution platform.
-6. Uploads the Playwright HTML report as a workflow artifact.
+2. Sets up Node.js 22.
+3. Installs dependencies using `npm ci`.
+4. Executes TypeScript type checking using `tsc --noEmit`.
+5. Installs Playwright browsers when Ubuntu execution is selected.
+6. Executes the Playwright test suite on Ubuntu or BrowserStack.
+7. Generates and uploads the Playwright HTML report as a GitHub Actions artifact.
 
-The Playwright report is retained for 30 days and uploaded even if the test execution fails, provided the workflow is not cancelled.
+### Quality Gates
 
-### Required GitHub Actions Secrets
+The pipeline includes automated quality checks to validate changes before they are merged into the main branch.
 
-The following repository secrets must be configured:
+- **TypeScript Validation:** Checks for TypeScript compilation and type errors.
+- **Automated Regression Testing:** Executes the full Playwright test suite for pull requests.
+- **Test Execution Status:** A failed typecheck or test execution causes the CI job to fail.
+- **Test Reports:** Playwright reports are uploaded as workflow artifacts and retained for 30 days.
 
-**SauceDemo credentials:**
-- `SD_BASE_URL`
-- `SD_USERNAME`
-- `SD_PASSWORD`
+### Branch Protection
 
-**BrowserStack credentials:**
-- `BROWSERSTACK_USERNAME`
-- `BROWSERSTACK_ACCESS_KEY`
+The `main` branch is protected using a GitHub Ruleset named **Main Branch Quality Gates**.
 
-BrowserStack credentials are used when BrowserStack is selected for manual workflow execution.
+The ruleset enforces:
+
+- Pull requests are required for changes to `main`.
+- The `test` GitHub Actions status check must pass before merging.
+- Direct force pushes are blocked.
+- Deletion of the protected branch is restricted.
+
+This ensures that changes are validated through automated checks before being merged into the main development branch.
+
+### Execution Platforms
+
+The framework supports two execution targets:
+
+- **Ubuntu:** Automated execution through GitHub Actions.
+- **BrowserStack:** Cloud-based cross-browser execution, triggered manually through workflow dispatch.
+
+### Required GitHub Secrets
+
+The following repository secrets are configured for CI execution:
+
+| Secret | Purpose |
+|---|---|
+| `SD_BASE_URL` | SauceDemo application URL |
+| `SD_USERNAME` | Application username |
+| `SD_PASSWORD` | Application password |
+| `BROWSERSTACK_USERNAME` | BrowserStack account username |
+| `BROWSERSTACK_ACCESS_KEY` | BrowserStack access key |
+
+---
 
 ## Future Enhancements
 
-Areas I'm considering for the next phase of framework development:
-
-- **Cross-browser coverage:** Extend execution to Firefox and WebKit alongside Chromium.
-- **API integration:** Expand API testing to support test data setup and cleanup, reducing repetitive UI operations in selected scenarios.
-- **Test data management:** Improve test data isolation and introduce more flexible data-driven scenarios.
-- **CI/CD quality gates:** Introduce linting and additional quality checks to catch issues before changes are merged.
-- **Reporting and diagnostics:** Improve failure analysis through enhanced trace collection, screenshot management and reporting.
+- Extend cross-browser coverage using Firefox and WebKit.
+- Expand API testing to include test data setup and cleanup.
+- Improve test data management and maintainability.
+- Enhance reporting and failure diagnostics.
+- Integrate quality metrics and observability dashboards using Grafana.
 
 ## Application Under Test
 
